@@ -1,4 +1,4 @@
-package com.kotlarz.services.implementations;
+package com.kotlarz.finder.services.implementations;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,8 +16,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
+import com.kotlarz.domain.AbstractJobOffer;
 import com.kotlarz.domain.BipPoznanOffer;
-import com.kotlarz.services.SiteFinder;
+import com.kotlarz.finder.services.SiteFinder;
+import com.kotlarz.finder.types.FinderTypes;
 import com.kotlarz.services.types.SiteTypes;
 import com.kotlarz.translator.Translator;
 import com.vaadin.server.Page;
@@ -71,7 +73,7 @@ public class BipPoznanFinder implements SiteFinder {
 		grid.setSizeFull();
 		grid.setItems(jobList);
 
-		grid.addColumn(BipPoznanOffer::getPosition).setCaption(Translator.getMessage("position")).setWidth(400);
+		grid.addColumn(BipPoznanOffer::getName).setCaption(Translator.getMessage("name")).setWidth(400);
 		grid.addColumn(BipPoznanOffer::getOrganization).setCaption(Translator.getMessage("organization")).setWidth(300);
 		grid.addColumn(BipPoznanOffer::getPublicDate).setCaption(Translator.getMessage("publicDate"));
 		grid.addColumn(BipPoznanOffer::getDeadline).setCaption(Translator.getMessage("deadline"));
@@ -85,6 +87,16 @@ public class BipPoznanFinder implements SiteFinder {
 		});
 
 		return grid;
+	}
+
+	@Override
+	public List<? extends AbstractJobOffer> getOffers() throws Exception {
+		return find();
+	}
+
+	@Override
+	public String getOrganizationName() {
+		return FinderTypes.POZNAN.toString();
 	}
 
 }

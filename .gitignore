@@ -28,3 +28,4 @@ mvnw.cmd
 .mvn/
 
 **/rebel.xml
+*.mv.db

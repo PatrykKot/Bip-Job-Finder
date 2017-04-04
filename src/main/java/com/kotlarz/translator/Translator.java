@@ -9,13 +9,15 @@ import java.util.Map;
 import java.util.Properties;
 
 public class Translator {
-	private static String plTranslationsPath = "locale/messages_pl.properties";
-
 	private static Map<String, Properties> translations;
 
 	private static void init() {
 		translations = new HashMap<>();
-		loadLanguage(ClassLoader.getSystemResource(plTranslationsPath).getFile(), "pl");
+		Language[] languages = Language.values();
+
+		for (Language lang : languages) {
+			loadLanguage(ClassLoader.getSystemResource(lang.getFilePath()).getFile(), lang.getLang());
+		}
 	}
 
 	private static void loadLanguage(String filePath, String lang) {

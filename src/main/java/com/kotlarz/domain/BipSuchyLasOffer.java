@@ -1,24 +1,9 @@
 package com.kotlarz.domain;
 
-public class BipSuchyLasOffer {
-	private String name;
+import com.kotlarz.finder.types.FinderTypes;
 
-	private String link;
-
-	public String getName() {
-		return name;
+public class BipSuchyLasOffer extends AbstractJobOffer {
+	public BipSuchyLasOffer() {
+		this.organizationName = FinderTypes.SUCHY_LAS.toString();
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getLink() {
-		return link;
-	}
-
-	public void setLink(String link) {
-		this.link = link;
-	}
-
 }

@@ -2,15 +2,16 @@ package com.kotlarz.domain;
 
 import org.json.JSONObject;
 
+import com.kotlarz.finder.types.FinderTypes;
 import com.kotlarz.services.types.SiteTypes;
 
-public class BipPoznanOffer {
+public class BipPoznanOffer extends AbstractJobOffer {
+
+	public BipPoznanOffer() {
+		this.organizationName = FinderTypes.POZNAN.toString();
+	}
 
 	private String organization;
-
-	private String link;
-
-	private String position;
 
 	private String publicDate;
 
@@ -22,22 +23,6 @@ public class BipPoznanOffer {
 
 	public void setOrganization(String organization) {
 		this.organization = organization;
-	}
-
-	public String getLink() {
-		return link;
-	}
-
-	public void setLink(String link) {
-		this.link = link;
-	}
-
-	public String getPosition() {
-		return position;
-	}
-
-	public void setPosition(String position) {
-		this.position = position;
 	}
 
 	public String getPublicDate() {
@@ -71,7 +56,7 @@ public class BipPoznanOffer {
 		BipPoznanOffer offer = new BipPoznanOffer();
 		offer.setLink(object.getString("link").replace("&api=json", ""));
 		offer.setOrganization(object.getString("nazwa_organizacja"));
-		offer.setPosition(object.getString("stanowisko"));
+		offer.setName(object.getString("stanowisko"));
 		offer.setPublicDate(object.getString("data_publikacji"));
 		offer.setDeadline(object.getString("termin_skladania_ofert"));
 		return offer;

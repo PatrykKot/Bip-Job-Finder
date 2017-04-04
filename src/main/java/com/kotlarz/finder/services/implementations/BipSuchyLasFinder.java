@@ -1,4 +1,4 @@
-package com.kotlarz.services.implementations;
+package com.kotlarz.finder.services.implementations;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -10,8 +10,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
+import com.kotlarz.domain.AbstractJobOffer;
 import com.kotlarz.domain.BipSuchyLasOffer;
-import com.kotlarz.services.SiteFinder;
+import com.kotlarz.finder.services.SiteFinder;
+import com.kotlarz.finder.types.FinderTypes;
 import com.kotlarz.translator.Translator;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Grid;
@@ -63,6 +65,16 @@ public class BipSuchyLasFinder implements SiteFinder {
 		});
 
 		return grid;
+	}
+
+	@Override
+	public List<? extends AbstractJobOffer> getOffers() throws Exception {
+		return find(getDocument(URL));
+	}
+
+	@Override
+	public String getOrganizationName() {
+		return FinderTypes.SUCHY_LAS.toString();
 	}
 
 }

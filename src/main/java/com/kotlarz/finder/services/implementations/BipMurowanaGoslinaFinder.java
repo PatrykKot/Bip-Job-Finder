@@ -1,4 +1,4 @@
-package com.kotlarz.services.implementations;
+package com.kotlarz.finder.services.implementations;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -21,13 +21,13 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.kotlarz.domain.AbstractJobOffer;
 import com.kotlarz.domain.BipMurowanaGoslinaOffer;
-import com.kotlarz.domain.BipSuchyLasOffer;
-import com.kotlarz.services.SiteFinder;
+import com.kotlarz.finder.services.SiteFinder;
+import com.kotlarz.finder.types.FinderTypes;
 import com.kotlarz.translator.Translator;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Grid;
@@ -96,6 +96,16 @@ public class BipMurowanaGoslinaFinder implements SiteFinder {
 		});
 
 		return grid;
+	}
+
+	@Override
+	public List<? extends AbstractJobOffer> getOffers() throws Exception {
+		return generateOffers(getXml(URL));
+	}
+
+	@Override
+	public String getOrganizationName() {
+		return FinderTypes.MUROWANA_GOSLINA.toString();
 	}
 
 }
