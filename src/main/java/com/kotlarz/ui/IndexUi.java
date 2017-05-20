@@ -4,13 +4,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 import com.kotlarz.finder.services.SiteFinder;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
-import com.vaadin.ui.Grid;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -18,6 +20,8 @@ import com.vaadin.ui.VerticalLayout;
 @SuppressWarnings("serial")
 @SpringUI
 public class IndexUi extends UI {
+
+	private static Logger log = Logger.getLogger(IndexUi.class);
 
 	@Autowired
 	ApplicationContext context;
@@ -43,13 +47,13 @@ public class IndexUi extends UI {
 
 		for (SiteFinder finder : finders) {
 			try {
-				Grid<?> grid = finder.generateGrid();
+				Component grid = finder.generateGrid();
 				if (grid == null)
 					continue;
 
 				vertLayout.addComponent(grid);
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("Nie można pobrać grida dla " + finder, e);
 			}
 		}
 

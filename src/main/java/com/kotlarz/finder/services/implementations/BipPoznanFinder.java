@@ -20,10 +20,14 @@ import com.kotlarz.domain.AbstractJobOffer;
 import com.kotlarz.domain.BipPoznanOffer;
 import com.kotlarz.finder.services.SiteFinder;
 import com.kotlarz.finder.types.FinderTypes;
-import com.kotlarz.services.types.SiteTypes;
+
 import com.kotlarz.translator.Translator;
 import com.vaadin.server.Page;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Grid.ItemClick;
 import com.vaadin.ui.components.grid.ItemClickListener;
 
@@ -58,7 +62,7 @@ public class BipPoznanFinder implements SiteFinder {
 		List<BipPoznanOffer> jobList = new LinkedList<>();
 		for (int i = 0; i < jobsArray.length(); i++) {
 			JSONObject obj = (JSONObject) jobsArray.get(i);
-			jobList.add(BipPoznanOffer.create(obj, SiteTypes.BIP_POZNAN));
+			jobList.add(BipPoznanOffer.create(obj));
 		}
 
 		return jobList;
@@ -66,7 +70,7 @@ public class BipPoznanFinder implements SiteFinder {
 
 	@SuppressWarnings("serial")
 	@Override
-	public Grid<?> generateGrid() throws Exception {
+	public Component generateGrid() throws Exception {
 		List<BipPoznanOffer> jobList = find();
 
 		Grid<BipPoznanOffer> grid = new Grid<BipPoznanOffer>();
@@ -86,7 +90,11 @@ public class BipPoznanFinder implements SiteFinder {
 			}
 		});
 
-		return grid;
+		Layout layout = new VerticalLayout();
+		Label label = new Label(Translator.getMessage(getOrganizationName()));
+
+		layout.addComponents(label, grid);
+		return layout;
 	}
 
 	@Override

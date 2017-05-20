@@ -11,7 +11,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import com.kotlarz.domain.AbstractJobOffer;
-import com.kotlarz.domain.BipSuchyLasOffer;
+import com.kotlarz.domain.BipRokietnicaOffer;
 import com.kotlarz.finder.services.SiteFinder;
 import com.kotlarz.finder.types.FinderTypes;
 import com.kotlarz.translator.Translator;
@@ -25,23 +25,24 @@ import com.vaadin.ui.Grid.ItemClick;
 import com.vaadin.ui.components.grid.ItemClickListener;
 
 @Service
-public class BipSuchyLasFinder implements SiteFinder {
+public class BipRokietnicaFinder implements SiteFinder {
 
-	private static String URL = "http://bip.suchylas.pl/ogloszenia/32/oferty-pracy/";
+	private static String URL = "http://bip.rokietnica.pl/public/?id=47021";
 
 	private Document getDocument(String url) throws IOException {
 		return Jsoup.connect(url).get();
 	}
 
-	private List<BipSuchyLasOffer> find(Document document) {
-		Elements artContent = document.getElementById("article-content").children();
-		List<BipSuchyLasOffer> offerList = new LinkedList<>();
+	private List<BipRokietnicaOffer> find(Document document) {
+		Elements artContent = document.select(".nazwa_pliku");
+		List<BipRokietnicaOffer> offerList = new LinkedList<>();
 
-		for (Element element : artContent) {
-			BipSuchyLasOffer offer = new BipSuchyLasOffer();
+		for (int i = 2; i < artContent.size(); i++) {
+			Element element = artContent.get(i);
 
-			offer.setName(element.select("h1").get(0).text());
-			offer.setLink("http://bip.suchylas.pl" + element.select("a").get(0).attr("href"));
+			BipRokietnicaOffer offer = new BipRokietnicaOffer();
+			offer.setName(element.text());
+			offer.setLink("http://bip.rokietnica.pl/public/" + element.attr("href"));
 
 			offerList.add(offer);
 		}
@@ -49,25 +50,30 @@ public class BipSuchyLasFinder implements SiteFinder {
 		return offerList;
 	}
 
+	@Override
+	public String getOrganizationName() {
+		return FinderTypes.ROKIETNICA.toString();
+	}
+
 	@SuppressWarnings("serial")
 	@Override
 	public Component generateGrid() throws Exception {
-		List<BipSuchyLasOffer> jobList = find(getDocument(URL));
+		List<BipRokietnicaOffer> jobList = find(getDocument(URL));
 
-		Grid<BipSuchyLasOffer> grid = new Grid<BipSuchyLasOffer>();
+		Grid<BipRokietnicaOffer> grid = new Grid<BipRokietnicaOffer>();
 		grid.setSizeFull();
 		grid.setItems(jobList);
 
-		grid.addColumn(BipSuchyLasOffer::getName).setCaption(Translator.getMessage("name"));
+		grid.addColumn(BipRokietnicaOffer::getName).setCaption(Translator.getMessage("name"));
 
-		grid.addItemClickListener(new ItemClickListener<BipSuchyLasOffer>() {
+		grid.addItemClickListener(new ItemClickListener<BipRokietnicaOffer>() {
 
 			@Override
-			public void itemClick(ItemClick<BipSuchyLasOffer> event) {
+			public void itemClick(ItemClick<BipRokietnicaOffer> event) {
 				Page.getCurrent().setLocation(event.getItem().getLink());
 			}
 		});
-		
+
 		Layout layout = new VerticalLayout();
 		Label label = new Label(Translator.getMessage(getOrganizationName()));
 
@@ -78,11 +84,6 @@ public class BipSuchyLasFinder implements SiteFinder {
 	@Override
 	public List<? extends AbstractJobOffer> getOffers() throws Exception {
 		return find(getDocument(URL));
-	}
-
-	@Override
-	public String getOrganizationName() {
-		return FinderTypes.SUCHY_LAS.toString();
 	}
 
 }

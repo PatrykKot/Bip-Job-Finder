@@ -3,7 +3,6 @@ package com.kotlarz.domain;
 import org.json.JSONObject;
 
 import com.kotlarz.finder.types.FinderTypes;
-import com.kotlarz.services.types.SiteTypes;
 
 public class BipPoznanOffer extends AbstractJobOffer {
 
@@ -41,15 +40,8 @@ public class BipPoznanOffer extends AbstractJobOffer {
 		this.deadline = deadline;
 	}
 
-	public static BipPoznanOffer create(JSONObject object, SiteTypes type) throws Exception {
-		switch (type) {
-		case BIP_POZNAN: {
+	public static BipPoznanOffer create(JSONObject object) throws Exception {
 			return createFromBipPoznan(object);
-		}
-		default: {
-			throw new IllegalArgumentException("Type " + type);
-		}
-		}
 	}
 
 	private static BipPoznanOffer createFromBipPoznan(JSONObject object) throws Exception {

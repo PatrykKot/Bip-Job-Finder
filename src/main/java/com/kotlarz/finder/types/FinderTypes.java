@@ -1,7 +1,8 @@
 package com.kotlarz.finder.types;
 
 public enum FinderTypes {
-	POZNAN("poznan"), MUROWANA_GOSLINA("murowanaGoslina"), SUCHY_LAS("suchyLas");
+	POZNAN("poznan"), MUROWANA_GOSLINA("murowanaGoslina"), SUCHY_LAS("suchyLas"), ROKIETNICA(
+			"rokietnica"), URBANISTYKA_INFO("urbanistykaInfo"), POWIAT_POZNAN("powiatPoznan");
 
 	private String organizationName;
 

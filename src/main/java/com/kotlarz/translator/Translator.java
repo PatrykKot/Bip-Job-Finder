@@ -3,12 +3,17 @@ package com.kotlarz.translator;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 public class Translator {
+	private static Logger log = Logger.getLogger(Translator.class);
+	
 	private static Map<String, Properties> translations;
 
 	private static void init() {
@@ -16,7 +21,7 @@ public class Translator {
 		Language[] languages = Language.values();
 
 		for (Language lang : languages) {
-			loadLanguage(ClassLoader.getSystemResource(lang.getFilePath()).getFile(), lang.getLang());
+			loadLanguage(lang.getFilePath(), lang.getLang());
 		}
 	}
 
@@ -31,15 +36,15 @@ public class Translator {
 
 		try {
 			input = new FileInputStream(path);
-			prop.load(input);
+			prop.load(new InputStreamReader(input, "UTF-8"));
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("Problem z plikiem tłumaczeń", ex);
 		} finally {
 			if (input != null) {
 				try {
 					input.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					log.error("Problem z zamknięciem pliku", e);
 				}
 			}
 		}
@@ -48,7 +53,7 @@ public class Translator {
 	}
 
 	public static String getMessage(String key) {
-		return getMessage(key, Locale.getDefault());
+		return getMessage(key, new Locale("pl"));
 	}
 
 	public static String getMessage(String key, Locale locale) {
